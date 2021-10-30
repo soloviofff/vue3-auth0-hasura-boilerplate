@@ -11,6 +11,12 @@ const state = reactive({
   token: null
 })
 
+
+async function setToken() {
+  const token_raw = await client.getIdTokenClaims()
+  state.token = token_raw.__raw
+  localStorage.setItem(process.env.VUE_APP_STORAGE_KEY_NAME, state.token)
+}
 /**
  * Authenticates the user using a popup window
  *
@@ -29,7 +35,9 @@ async function loginWithPopup() {
   
   state.user = await client.getUser()
   state.isAuthenticated = true
-  if(state.isAuthenticated) state.token = await client.getTokenSilently()
+  if(state.isAuthenticated) {
+    setToken()
+  }
 }
 
 /**
@@ -44,7 +52,9 @@ async function handleRedirectCallback() {
     await client.handleRedirectCallback()
     state.user = await client.getUser()
     state.isAuthenticated = true
-    if(state.isAuthenticated) state.token = await client.getTokenSilently()
+    if(state.isAuthenticated) {
+      setToken()
+    }
   } catch (e) {
     state.error = e
   } finally {
@@ -95,6 +105,7 @@ function getTokenWithPopup(o) {
  * @param {Object} o
  */
 function logout(o) {
+  localStorage.removeItem(process.env.VUE_APP_STORAGE_KEY_NAME);
   return client.logout(o)
 //   return client.logout({
 //     returnTo: window.location.origin
@@ -177,7 +188,9 @@ async function init(options) {
     // Initialize our internal authentication state
     state.isAuthenticated = await client.isAuthenticated()
     state.user = await client.getUser()
-    if(state.isAuthenticated) state.token = await client.getTokenSilently()
+    if(state.isAuthenticated) {
+      setToken()
+    }
     state.loading = false
   }
 

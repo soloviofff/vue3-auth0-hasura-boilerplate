@@ -7,9 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@apollo/client": "^3.4.16",
     "@auth0/auth0-spa-js": "^1.19.2",
+    "@vue/apollo-option": "^4.0.0-alpha.15",
     "core-js": "^3.6.5",
+    "graphql": "^16.0.0",
     "register-service-worker": "^1.7.1",
+    "subscriptions-transport-ws": "^0.9.19",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
